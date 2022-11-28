@@ -42,6 +42,20 @@ void loop() {
 
         my_display.my_buffer.print(my_string, my_font, rgb{0, 128, 255}, 2);
 
+        // my_display.my_buffer.setCursorPos(0, my_font.fontDict['0'].height * 2 + 2);
+
+        // my_string = "";
+        // my_string += String(spectrometer.getCount());
+
+        // my_display.my_buffer.print(my_string, my_font, rgb{0, 128, 255}, 2);
+
+        // my_display.my_buffer.setCursorPos(0, my_display.my_buffer.getCursorY() + my_font.fontDict['0'].height * 2 + 2);
+
+        // my_string = "";
+        // my_string += String(spectrometer.getNots());
+
+        // my_display.my_buffer.print(my_string, my_font, rgb{0, 128, 255}, 2);
+
         my_display.update_display();
 
         d_threshold = millis() + d_frequency;

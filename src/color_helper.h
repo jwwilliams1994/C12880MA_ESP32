@@ -160,6 +160,10 @@ rgb nmToRGB(float _w) {
     _g = _g > 0.0f ? 255.0f * _g * factor : 0.0f;
     _b = _b > 0.0f ? 255.0f * _b * factor : 0.0f;
 
+    if (_r == 0 && _g == 0 && _b == 0) {
+        _r = _b = _g = 50.0f;
+    }
+
 
     return rgb{byte(_r), byte(_g), byte(_b)};
 }

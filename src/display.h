@@ -166,13 +166,13 @@ public:
             float xslope = 1.0f;
             if (y_range != 0.0f) xslope = abs(float(x_range) / float(y_range));
             if (xslope > 1.0f) xslope = 1.0f;
-            for (float x{0}; x < x_range; x += xslope) {
+            for (float x{0}; x <= x_range; x += xslope) {
                 int y = int(x * slope);
                 drawPixel(int(x) + x_start, y + y_start, lineColor);
             }
         } else {
             float yLower = y_start < y_end ? y_start : y_end;
-            for (float y{0}; y < y_range; y += 1.0f) {
+            for (float y{0}; y <= y_range; y += 1.0f) {
                 drawPixel(x_start, y + yLower, lineColor);
             }
         }
@@ -205,6 +205,14 @@ public:
         float x_scale{239.0f / x_range};
         float y_scale{134.0f / y_range};
         float nm{0.0f};
+        for (float i{0.0f}; i < x_highest; i += 100.0f) {
+            int x_start = (i - x_lowest) * x_scale;
+            if (x_start < 0) continue;
+            drawLine(x_start, 0, x_start, 135, rgb{64, 64, 64});
+        }
+        drawLine(round((445.0f - x_lowest) * x_scale), 0, round((445.0f - x_lowest) * x_scale), 135, rgb{0, 0, 128});
+        drawLine(round((537.0f - x_lowest) * x_scale), 0, round((537.0f - x_lowest) * x_scale), 135, rgb{0, 128, 0});
+        drawLine(round((630.0f - x_lowest) * x_scale), 0, round((630.0f - x_lowest) * x_scale), 135, rgb{128, 0, 0});
         for (int16_t i{0}; i < numPoints - 1; i++) {
 
             nm = pixelToNmMap[constrain(i, 0, 288)];
@@ -212,12 +220,12 @@ public:
 
             float x_1 = nm;
             float x_2 = pixelToNmMap[i + 1];
-            int x_start = ((x_1 - x_lowest) * x_scale);
-            int y_start = ((float(inp[i]) - y_lowest) * y_scale);
-            int x_end = ((x_2 - x_lowest) * x_scale);
-            int y_end = ((float(inp[i + 1]) - y_lowest) * y_scale);
-            y_start = 134.0f - y_start;
-            y_end = 134.0f - y_end;
+            int x_start = round((x_1 - x_lowest) * x_scale);
+            int y_start = round((float(inp[i]) - y_lowest) * y_scale);
+            int x_end = round((x_2 - x_lowest) * x_scale);
+            int y_end = round((float(inp[i + 1]) - y_lowest) * y_scale);
+            y_start = 134 - y_start;
+            y_end = 134 - y_end;
             drawLine(x_start, y_start, x_end, y_end, _lineColor);
             if (drawDebugPoints) drawPoint(x_start, y_start);
         }
