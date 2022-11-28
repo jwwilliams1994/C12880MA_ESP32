@@ -20,8 +20,8 @@ unsigned long m_threshold{300};
 unsigned long m_frequency{8000};
 unsigned long m_counter{0};
 
-unsigned long d_threshold{5};
-unsigned long d_frequency{10};
+unsigned long d_threshold{1};
+unsigned long d_frequency{6};
 
 void loop() {
     if (millis() > m_threshold) {
@@ -30,7 +30,7 @@ void loop() {
         m_counter = 0;
         m_threshold += m_frequency;
     }
-    if (millis() > d_threshold) {
+    if (millis() >= d_threshold) {
         spectrometer.read();
 
         my_display.reset_buffer();

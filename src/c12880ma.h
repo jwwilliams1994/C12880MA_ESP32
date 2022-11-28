@@ -24,9 +24,9 @@ class c12880ma {
     static const int numChannels{288};
     uint16_t dataIndex{0};
     uint16_t highestSeen{0};
-    int16_t integrationValue{0};
-    int16_t adjAmt{0};
-    int16_t adjAcc{0};
+    int32_t integrationValue{0};
+    int32_t adjAmt{0};
+    int32_t adjAcc{0};
     uint16_t dataBuffer[numChannels]{};
     void appendBuffer(uint16_t _inp) {
         dataBuffer[dataIndex] = _inp;
@@ -43,20 +43,22 @@ class c12880ma {
             if (dataIndex >= numChannels) dataIndex = 0;
         }
     }
-    void trigger(uint16_t integration=0) {
+    void trigger(int32_t integration=0) {
         start.on();
         clock.toggleTimes(6 + integration);
         start.off();
     }
 
     void autoInt() {
-        static uint16_t intCeil{40000};
+        static int32_t intCeil{300000};
+        int32_t adjBy = integrationValue / 100;
+        if (adjBy < 1) adjBy = 1;
         if (highestSeen < 3700) {
-            if (adjAcc < 200) adjAcc++;
+            if (adjAcc < 200) adjAcc += adjBy;
             if (adjAcc < 0) adjAcc = 0;
             if (adjAmt < 0) adjAmt = 0;
         } else if (highestSeen > 4000) {
-            if (adjAcc > -200) adjAcc--;
+            if (adjAcc > -200) adjAcc -= adjBy;
             if (adjAcc > 0) adjAcc = 0;
             if (adjAmt > 0) adjAmt = 0;
         } else {
@@ -79,15 +81,16 @@ public:
     uint16_t getNumChannels() { return numChannels; }
     uint16_t* getData() { return data; }
     uint16_t getHighestSeen() { return highestSeen; }
-    uint16_t getIntegration() { return integrationValue; }
-    int16_t getAdjAmt() { return adjAmt; }
-    int16_t getAdjAcc() { return adjAcc; }
+    int32_t getIntegration() { return integrationValue; }
+    int32_t getAdjAmt() { return adjAmt; }
+    int32_t getAdjAcc() { return adjAcc; }
 
     void read() {
         clock.toggleTimes(2);
         trigger(integrationValue);
         clock.toggleTimes(84);
         bool readYet{false};
+        uint16_t breakAfter{1000};
         while (!eos.digital_read()) {
             if (trg.digital_read()) {
                 if (!readYet) {
@@ -99,6 +102,8 @@ public:
             }
             clock.toggle();
             delayMicroseconds(1);
+            breakAfter--;
+            if (breakAfter == 0) break;
         }
         clock.off();
         clock.toggleTimes(4);

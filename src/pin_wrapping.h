@@ -87,8 +87,8 @@ public:
         digital_write(!digital);
     }
 
-    void toggleTimes(uint16_t _num, uint16_t _delay=1) {
-        for (uint16_t i = 0; i < (_num * 2); i++) {
+    void toggleTimes(uint32_t _num, uint16_t _delay=1) {
+        for (uint32_t i = 0; i < (_num * 2); i++) {
             delayMicroseconds(_delay);
             toggle();
         }
