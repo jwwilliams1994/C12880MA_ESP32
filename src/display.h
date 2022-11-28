@@ -191,8 +191,8 @@ public:
         int numPoints{_len};
         float y_highest{_max};
         float y_lowest{_min};
-        unsigned int x_highest{pixelToNmMap[287]};
-        unsigned int x_lowest{pixelToNmMap[0]};
+        float x_highest{pixelToNmMap[287]};
+        float x_lowest{pixelToNmMap[0]};
         rgb lineColor{255, 128, 128};
         for (int16_t i{0}; i < numPoints; i++) {
             if (float(inp[i]) > y_highest) y_highest = float(inp[i]);
@@ -200,7 +200,7 @@ public:
         }
         if (x_highest == 0.0f) return;
         float y_range = (y_highest - y_lowest);
-        float x_range = float(x_highest - x_lowest);
+        float x_range = (x_highest - x_lowest);
         if (x_range == 0.0f) return;
         float x_scale{239.0f / x_range};
         float y_scale{134.0f / y_range};
@@ -212,9 +212,9 @@ public:
 
             float x_1 = nm;
             float x_2 = pixelToNmMap[i + 1];
-            int x_start = (float(x_1 - x_lowest) * x_scale);
+            int x_start = ((x_1 - x_lowest) * x_scale);
             int y_start = ((float(inp[i]) - y_lowest) * y_scale);
-            int x_end = (float(x_2 - x_lowest) * x_scale);
+            int x_end = ((x_2 - x_lowest) * x_scale);
             int y_end = ((float(inp[i + 1]) - y_lowest) * y_scale);
             y_start = 134.0f - y_start;
             y_end = 134.0f - y_end;
