@@ -23,10 +23,23 @@ unsigned long m_counter{0};
 unsigned long d_threshold{1};
 unsigned long d_frequency{6};
 
+void printData() {
+    uint16_t* myData = spectrometer.getData();
+    print("{");
+    for (int i{0}; i < spectrometer.getNumChannels(); i++) {
+        if (i > 0) print(",");
+        print(pixelToNmMap[i], ":", myData[i]);
+    }
+    println();
+}
+
 void loop() {
     if (millis() > m_threshold) {
         print_time();
         println(m_counter);
+        
+        printData();
+
         m_counter = 0;
         m_threshold += m_frequency;
     }

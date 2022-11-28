@@ -8,6 +8,7 @@ struct fontData {
     byte yoffset;
     byte width;
     byte height;
+    fontData(uint64_t _data, byte _xoff, byte _yoff, byte _width, byte _height) : data{_data}, xoffset{_xoff}, yoffset{_yoff}, width{_width}, height{_height} {}
 };
 
 struct myFont {
