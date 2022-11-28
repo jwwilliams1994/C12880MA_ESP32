@@ -25,7 +25,6 @@ class c12880ma {
     uint16_t dataIndex{0};
     uint16_t highestSeen{0};
     int16_t integrationValue{0};
-    bool autoIntegration{true};
     int16_t adjAmt{0};
     int16_t adjAcc{0};
     uint16_t dataBuffer[numChannels]{};
@@ -51,7 +50,7 @@ class c12880ma {
     }
 
     void autoInt() {
-        static uint16_t adjCeil{40000};
+        static uint16_t intCeil{40000};
         if (highestSeen < 3700) {
             if (adjAcc < 200) adjAcc++;
             if (adjAcc < 0) adjAcc = 0;
@@ -72,8 +71,8 @@ class c12880ma {
             if (integrationValue > 0 && integrationValue <= abs(adjAmt)) integrationValue = 0;
         }
         if (highestSeen < 3700) {
-            if (integrationValue < adjCeil - adjAmt) integrationValue += adjAmt;
-            if (integrationValue < adjCeil && integrationValue >= adjCeil - adjAmt) integrationValue = adjCeil;
+            if (integrationValue < intCeil - adjAmt) integrationValue += adjAmt;
+            if (integrationValue < intCeil && integrationValue >= intCeil - adjAmt) integrationValue = intCeil;
         }
     }
 public:
